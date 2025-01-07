@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hinnete kalkulaator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #f9f9f9;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hinnete kalkulaator</h1>
+
+        <label for="max-points">Sisestage maksimumpunktid:</label>
+        <input type="number" id="max-points">
+
+        <label for="student-points">Sisestage õpilase punktid:</label>
+        <input type="number" id="student-points">
+
+        <button onclick="calculateGrade()">Arvuta hinne</button>
+
+        <div id="result" class="result" style="display: none;"></div>
+
+        <h2>Hindamine</h2>
+        <table id="grading-scale">
+            <thead>
+                <tr>
+                    <th>Hinne</th>
+                    <th>Protsendivahemik</th>
+                    <th>Punktide vahemik</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>5+</td><td>100%</td><td id="5plus-points">-</td></tr>
+                <tr><td>5</td><td>95% - 99%</td><td id="5-points">-</td></tr>
+                <tr><td>5-</td><td>90% - 94%</td><td id="5minus-points">-</td></tr>
+                <tr><td>4+</td><td>85% - 89%</td><td id="4plus-points">-</td></tr>
+                <tr><td>4</td><td>80% - 84%</td><td id="4-points">-</td></tr>
+                <tr><td>4-</td><td>75% - 79%</td><td id="4minus-points">-</td></tr>
+                <tr><td>3+</td><td>70% - 74%</td><td id="3plus-points">-</td></tr>
+                <tr><td>3</td><td>55% - 69%</td><td id="3-points">-</td></tr>
+                <tr><td>3-</td><td>50% - 54%</td><td id="3minus-points">-</td></tr>
+                <tr><td>2</td><td>20% - 49%</td><td id="2-points">-</td></tr>
+                <tr><td>1</td><td>0% - 19%</td><td id="1-points">-</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function calculateGrade() {
+            const maxPoints = parseFloat(document.getElementById('max-points').value);
+            const studentPoints = parseFloat(document.getElementById('student-points').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(maxPoints) || isNaN(studentPoints) || maxPoints <= 0) {
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = 'Sisestage mõlemale väljale kehtivad numbrid.';
+                return;
+            }
+
+            const percentage = (studentPoints / maxPoints) * 100;
+            let grade;
+
+            if (percentage === 100) {
+                grade = '5+';
+            } else if (percentage >= 95) {
+                grade = '5';
+            } else if (percentage >= 90) {
+                grade = '5-';
+            } else if (percentage >= 85) {
+                grade = '4+';
+            } else if (percentage >= 80) {
+                grade = '4';
+            } else if (percentage >= 75) {
+                grade = '4-';
+            } else if (percentage >= 70) {
+                grade = '3+';
+            } else if (percentage >= 55) {
+                grade = '3';
+            } else if (percentage >= 50) {
+                grade = '3-';
+            } else if (percentage >= 20) {
+                grade = '2';
+            } else {
+                grade = '1';
+            }
+
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `Kui õpilane on saanud <strong>${percentage.toFixed(1)}%</strong>, siis hinne on <strong>${grade}</strong>.`;
+
+            updateGradingScale(maxPoints);
+        }
+
+        function updateGradingScale(maxPoints) {
+            const scale = [
+                { id: '5plus-points', range: [100, 100] },
+                { id: '5-points', range: [95, 99] },
+                { id: '5minus-points', range: [90, 94] },
+                { id: '4plus-points', range: [85, 89] },
+                { id: '4-points', range: [80, 84] },
+                { id: '4minus-points', range: [75, 79] },
+                { id: '3plus-points', range: [70, 74] },
+                { id: '3-points', range: [55, 69] },
+                { id: '3minus-points', range: [50, 54] },
+                { id: '2-points', range: [20, 49] },
+                { id: '1-points', range: [0, 19] },
+            ];
+
+            scale.forEach(({ id, range }) => {
+                const minPoints = (range[0] / 100) * maxPoints;
+                const maxPointsRange = (range[1] / 100) * maxPoints;
+                document.getElementById(id).textContent = `${minPoints.toFixed(1)} - ${maxPointsRange.toFixed(1)}`;
+            });
+        }
+    </script>
+</body>
+</html>
