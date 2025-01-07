@@ -160,16 +160,16 @@
         function updateGradingScale(maxPoints) {
             const scale = [
                 { id: '5plus-points', range: [100, 100] },
-                { id: '5-points', range: [95, 99] },
-                { id: '5minus-points', range: [90, 94] },
-                { id: '4plus-points', range: [85, 89] },
-                { id: '4-points', range: [80, 84] },
-                { id: '4minus-points', range: [75, 79] },
-                { id: '3plus-points', range: [70, 74] },
-                { id: '3-points', range: [55, 69] },
-                { id: '3minus-points', range: [50, 54] },
-                { id: '2-points', range: [20, 49] },
-                { id: '1-points', range: [0, 19] },
+                { id: '5-points', range: [95, 99.9999] },
+                { id: '5minus-points', range: [90, 94.9999] },
+                { id: '4plus-points', range: [85, 89.9999] },
+                { id: '4-points', range: [80, 84.9999] },
+                { id: '4minus-points', range: [75, 79.9999] },
+                { id: '3plus-points', range: [70, 74.9999] },
+                { id: '3-points', range: [55, 69.9999] },
+                { id: '3minus-points', range: [50, 54.9999] },
+                { id: '2-points', range: [20, 49.9999] },
+                { id: '1-points', range: [0, 19.9999] },
             ];
 
             scale.forEach(({ id, range }) => {
@@ -178,6 +178,10 @@
                 document.getElementById(id).textContent = `${minPoints.toFixed(1)} - ${maxPointsRange.toFixed(1)}`;
             });
         }
+
+
+
+
     </script>
 </body>
 </html>
