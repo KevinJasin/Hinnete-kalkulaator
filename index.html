@@ -152,35 +152,45 @@
             }
 
             resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `Õpilane on saanud <strong>${percentage.toFixed(1)}%</strong>, siis hinne on <strong>${grade}</strong>.`;
+            resultDiv.innerHTML = `Kui õpilane on saanud <strong>${percentage.toFixed(1)}%</strong>, siis hinne on <strong>${grade}</strong>.`;
 
             updateGradingScale(maxPoints);
         }
 
         function updateGradingScale(maxPoints) {
-            const scale = [
-                { id: '5plus-points', range: [100, 100] },
-                { id: '5-points', range: [95, 99.9999] },
-                { id: '5minus-points', range: [90, 94.9999] },
-                { id: '4plus-points', range: [85, 89.9999] },
-                { id: '4-points', range: [80, 84.9999] },
-                { id: '4minus-points', range: [75, 79.9999] },
-                { id: '3plus-points', range: [70, 74.9999] },
-                { id: '3-points', range: [55, 69.9999] },
-                { id: '3minus-points', range: [50, 54.9999] },
-                { id: '2-points', range: [20, 49.9999] },
-                { id: '1-points', range: [0, 19.9999] },
-            ];
+    const scale = [
+        { id: '5plus-points', range: [100, 100] },
+        { id: '5-points', range: [95, 99.99] },
+        { id: '5minus-points', range: [90, 94.99] },
+        { id: '4plus-points', range: [85, 89.99] },
+        { id: '4-points', range: [80, 84.99] },
+        { id: '4minus-points', range: [75, 79.99] },
+        { id: '3plus-points', range: [70, 74.99] },
+        { id: '3-points', range: [55, 69.99] },
+        { id: '3minus-points', range: [50, 54.99] },
+        { id: '2-points', range: [20, 49.99] },
+        { id: '1-points', range: [0, 19.99] },
+    ];
 
-            scale.forEach(({ id, range }) => {
-                const minPoints = (range[0] / 100) * maxPoints;
-                const maxPointsRange = (range[1] / 100) * maxPoints;
-                document.getElementById(id).textContent = `${minPoints.toFixed(1)} - ${maxPointsRange.toFixed(1)}`;
-            });
+    let previousMin = maxPoints + 1;  
+
+    scale.forEach(({ id, range }, index) => {
+        let maxPointsRange = Math.floor((range[1] / 100) * maxPoints);
+        let minPointsRange = Math.ceil((range[0] / 100) * maxPoints);
+
+        if (maxPointsRange >= previousMin) {
+            maxPointsRange = previousMin - 1;
+        }
+        minPointsRange = Math.min(minPointsRange, maxPointsRange);
+
+        if (id === '1-points') {
+            minPointsRange = 0;
         }
 
-
-
+        document.getElementById(id).textContent = `${minPointsRange} - ${maxPointsRange}`;
+        previousMin = minPointsRange;
+    });
+}
 
     </script>
 </body>
