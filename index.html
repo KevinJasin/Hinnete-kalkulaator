@@ -76,17 +76,12 @@
 <body>
     <div class="container">
         <h1>Hinnete kalkulaator</h1>
-
         <label for="max-points">Sisestage maksimumpunktid:</label>
         <input type="number" id="max-points">
-
         <label for="student-points">Sisestage õpilase punktid:</label>
         <input type="number" id="student-points">
-
         <button onclick="calculateGrade()">Arvuta hinne</button>
-
         <div id="result" class="result" style="display: none;"></div>
-
         <h2>Hindamine</h2>
         <table id="grading-scale">
             <thead>
@@ -111,22 +106,18 @@
             </tbody>
         </table>
     </div>
-
     <script>
         function calculateGrade() {
             const maxPoints = parseFloat(document.getElementById('max-points').value);
             const studentPoints = parseFloat(document.getElementById('student-points').value);
             const resultDiv = document.getElementById('result');
-
             if (isNaN(maxPoints) || isNaN(studentPoints) || maxPoints <= 0) {
                 resultDiv.style.display = 'block';
                 resultDiv.textContent = 'Sisestage mõlemale väljale kehtivad numbrid.';
                 return;
             }
-
             const percentage = (studentPoints / maxPoints) * 100;
             let grade;
-
             if (percentage === 100) {
                 grade = '5+';
             } else if (percentage >= 95) {
@@ -150,48 +141,30 @@
             } else {
                 grade = '1';
             }
-
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `Õpilane on saanud <strong>${percentage.toFixed(1)}%</strong>, siis hinne on <strong>${grade}</strong>.`;
-
             updateGradingScale(maxPoints);
         }
-
         function updateGradingScale(maxPoints) {
-    const scale = [
-        { id: '5plus-points', range: [100, 100] },
-        { id: '5-points', range: [95, 99.99] },
-        { id: '5minus-points', range: [90, 94.99] },
-        { id: '4plus-points', range: [85, 89.99] },
-        { id: '4-points', range: [80, 84.99] },
-        { id: '4minus-points', range: [75, 79.99] },
-        { id: '3plus-points', range: [70, 74.99] },
-        { id: '3-points', range: [55, 69.99] },
-        { id: '3minus-points', range: [50, 54.99] },
-        { id: '2-points', range: [20, 49.99] },
-        { id: '1-points', range: [0, 19.99] },
-    ];
-
-    let previousMin = maxPoints + 1;  
-
-    scale.forEach(({ id, range }, index) => {
-        let maxPointsRange = Math.floor((range[1] / 100) * maxPoints);
-        let minPointsRange = Math.ceil((range[0] / 100) * maxPoints);
-
-        if (maxPointsRange >= previousMin) {
-            maxPointsRange = previousMin - 1;
+            const scale = [
+                { id: '5plus-points', range: [100, 100] },
+                { id: '5-points', range: [95, 99] },
+                { id: '5minus-points', range: [90, 94] },
+                { id: '4plus-points', range: [85, 89] },
+                { id: '4-points', range: [80, 84] },
+                { id: '4minus-points', range: [75, 79] },
+                { id: '3plus-points', range: [70, 74] },
+                { id: '3-points', range: [55, 69] },
+                { id: '3minus-points', range: [50, 54] },
+                { id: '2-points', range: [20, 49] },
+                { id: '1-points', range: [0, 19] },
+            ];
+            scale.forEach(({ id, range }) => {
+                const minPoints = (range[0] / 100) * maxPoints;
+                const maxPointsRange = (range[1] / 100) * maxPoints;
+                document.getElementById(id).textContent = `${minPoints.toFixed(1)} - ${maxPointsRange.toFixed(1)}`;
+            });
         }
-        minPointsRange = Math.min(minPointsRange, maxPointsRange);
-
-        if (id === '1-points') {
-            minPointsRange = 0;
-        }
-
-        document.getElementById(id).textContent = `${minPointsRange} - ${maxPointsRange}`;
-        previousMin = minPointsRange;
-    });
-}
-
     </script>
 </body>
 </html>
